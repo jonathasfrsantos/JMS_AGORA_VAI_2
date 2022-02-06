@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CustomerListController">
+   <children>
+      <Label prefHeight="41.0" prefWidth="132.0" text="Registro de clientes" />
+      <HBox prefHeight="33.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="btNew" mnemonicParsing="false" onAction="#onBtNewAction" text="Novo" textFill="#1e542d" />
+         </children>
+      </HBox>
+      <TableView fx:id="tableViewCustomer" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+            <TableColumn fx:id="tableColumnCod" prefWidth="75.0" text="Codigo" />
+          <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Empresa" />
+          <TableColumn fx:id="tableColumnFeesValue" prefWidth="75.0" text="Honorários" />
+            <TableColumn fx:id="tableColumnEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="tableColumnEmail2" prefWidth="75.0" text="Email 2" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>
