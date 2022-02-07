@@ -86,7 +86,7 @@ public class CustomerFormController implements Initializable {
 		}
 		try {
 			entity = getFormData();
-			service.saveOrUpdate(entity);
+			service.insertOrUpdate(entity);
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		}

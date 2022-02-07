@@ -160,5 +160,34 @@ public class CustomerDaoJDBC implements CustomerDao {
 		}
 
 	}
+	
+	@Override
+	public void InsertOrUpdate(Customer obj) {
+		PreparedStatement st = null;
+		
+		try {
+			st  = conn.prepareStatement(
+				"INSERT INTO tb_customer (cod_customer, name, feesValue, email, email2) "
+				+ "VALUES(?, ?, ?, ?, ?) "
+				+ "ON DUPLICATE KEY UPDATE name = values(name), feesValue = values(feesValue), email = values(email), email2 = values(email2) ");
+			
+				st.setInt(1, obj.getCodCustomer());
+				st.setString(2, obj.getName());
+				st.setDouble(3, obj.getFeesValue());
+				st.setString(4, obj.getEmail());
+				st.setString(5, obj.getEmail2());
+				
+				st.executeUpdate();
+					
+		}catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	
+	
 
 }

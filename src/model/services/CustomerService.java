@@ -15,14 +15,8 @@ public class CustomerService {
 		return dao.findAll();
 	}
 	
-	public void saveOrUpdate(Customer obj) {
-		if (obj.getId() == null) {
-			dao.insert(obj);
-		}
-		else  {
-			dao.update(obj);
-			
-		}
+	public void insertOrUpdate(Customer obj) {
+		dao.InsertOrUpdate(obj);
 	}
 	
 	public void remove(Customer obj) {

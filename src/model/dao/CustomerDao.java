@@ -11,6 +11,7 @@ public interface CustomerDao {
 	void deleteByCod(Integer cod); 
 	Customer findByCod(Integer cod); 
 	List<Customer> findAll();
+	void InsertOrUpdate(Customer obj);
 	
 	
 
