@@ -33,7 +33,7 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemReceiptAction() {
 		loadView("/gui/ReceiptList.fxml", (ReceiptListController controller) -> {
-			controller.setSellerService(new ReceiptService());
+			controller.setReceiptService(new ReceiptService());
 			controller.updateTableView();
 		});
 	}

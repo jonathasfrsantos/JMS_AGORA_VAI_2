@@ -30,7 +30,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.entities.Seller;
+import model.entities.Customer;
+import model.entities.Receipt;
 import model.services.CustomerService;
 import model.services.ReceiptService;
 
@@ -39,42 +40,56 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 	private ReceiptService service;
 
 	@FXML
-	private TableView<Seller> tableViewSeller;
+	private TableView<Receipt> tableViewReceipt;
 
 	@FXML
-	private TableColumn<Seller, Integer> tableColumnId;
+	private TableColumn<Receipt, Integer> tableColumnCod;
 
 	@FXML
-	private TableColumn<Seller, String> tableColumnName;
+	private TableColumn<Receipt, String> tableColumnDocumentType;
 
 	@FXML
-	private TableColumn<Seller, String> tableColumnEmail;
+	private TableColumn<Receipt, Date> tableColumnIssueDate;
 	
 	@FXML
-	private TableColumn<Seller, Date> tableColumnBirthDate;
+	private TableColumn<Receipt, Date> tableColumnDueDate;
 	
 	@FXML
-	private TableColumn<Seller, Double> tableColumnBaseSalary;
+	private TableColumn<Receipt, Double> tableColumnValue;
 	
 	@FXML
-	private TableColumn<Seller, Seller> tableColumnEDIT;
+	private TableColumn<Receipt, String> tableColumnPaymentStatus;
+	
+	@FXML
+	private TableColumn<Receipt, Date> tableColumnPayDate;
+	
+	@FXML
+	private TableColumn<Receipt, String> tableColumnBank;
+	
+	@FXML
+	private TableColumn<Customer, Customer> tableColumnCustomer;
+	
+	@FXML
+	private TableColumn<Receipt, Receipt> tableColumnEDIT;
 
 	@FXML
-	private TableColumn<Seller, Seller> tableColumnREMOVE;
+	private TableColumn<Receipt, Receipt> tableColumnREMOVE;
+	
+
 
 	@FXML
 	private Button btNew;
 
-	private ObservableList<Seller> obsList;
+	private ObservableList<Receipt> obsList;
 
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		Seller obj = new Seller();
-		createDialogForm(obj, "/gui/SellerForm.fxml", parentStage);
+		Receipt obj = new Receipt();
+		createDialogForm(obj, "/gui/ReceiptForm.fxml", parentStage);
 	}
 
-	public void setSellerService(ReceiptService service) {
+	public void setReceiptService(ReceiptService service) {
 		this.service = service;
 	}
 
@@ -84,43 +99,53 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 	}
 
 	private void initializeNodes() {
-		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
-		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
-		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
-		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
+		tableColumnCod.setCellValueFactory(new PropertyValueFactory<>("codDocument"));
+		tableColumnDocumentType.setCellValueFactory(new PropertyValueFactory<>("documentType"));
+		tableColumnIssueDate.setCellValueFactory(new PropertyValueFactory<>("issueDate"));
+		Utils.formatTableColumnDate(tableColumnIssueDate, "dd/MM/yyyy");
+		tableColumnDueDate.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+		Utils.formatTableColumnDate(tableColumnDueDate, "dd/MM/yyyy");
+		tableColumnValue.setCellValueFactory(new PropertyValueFactory<>("value"));
+		Utils.formatTableColumnDouble(tableColumnValue, 2);
+		tableColumnPaymentStatus.setCellValueFactory(new PropertyValueFactory<>("paymentStatus"));
+		tableColumnPayDate.setCellValueFactory(new PropertyValueFactory<>("payDate"));
+		//Utils.formatTableColumnDate(tableColumnPayDate, "dd/MM/yyyy"); // apos comentar essa linha funcionou, porque o campo de data não pode ser um null
+		tableColumnBank.setCellValueFactory(new PropertyValueFactory<>("bank"));
+		
+		
+		
+		
+	
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		tableViewSeller.prefHeightProperty().bind(stage.heightProperty());
+		tableViewReceipt.prefHeightProperty().bind(stage.heightProperty());
 	}
 
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service was null");
 		}
-		List<Seller> list = service.findAll();
+		List<Receipt> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
-		tableViewSeller.setItems(obsList);
+		tableViewReceipt.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
 	}
 
-	private void createDialogForm(Seller obj, String absoluteName, Stage parentStage) {
+	private void createDialogForm(Receipt obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 
 			ReceiptFormController controller = loader.getController();
-			controller.setSeller(obj);
+			controller.setReceipt(obj);
 			controller.setServices(new ReceiptService(), new CustomerService());
 			controller.loadAssociatedObjects();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Enter Seller data");
+			dialogStage.setTitle("Enter Receipt data");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
@@ -139,11 +164,11 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 
 	private void initEditButtons() {
 		tableColumnEDIT.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnEDIT.setCellFactory(param -> new TableCell<Seller, Seller>() {
+		tableColumnEDIT.setCellFactory(param -> new TableCell<Receipt, Receipt>() {
 			private final Button button = new Button("edit");
 
 			@Override
-			protected void updateItem(Seller obj, boolean empty) {
+			protected void updateItem(Receipt obj, boolean empty) {
 				super.updateItem(obj, empty);
 				if (obj == null) {
 					setGraphic(null);
@@ -151,18 +176,18 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 				}
 				setGraphic(button);
 				button.setOnAction(
-						event -> createDialogForm(obj, "/gui/SellerForm.fxml", Utils.currentStage(event)));
+						event -> createDialogForm(obj, "/gui/ReceiptForm.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
 
 	private void initRemoveButtons() {
 		tableColumnREMOVE.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-		tableColumnREMOVE.setCellFactory(param -> new TableCell<Seller, Seller>() {
+		tableColumnREMOVE.setCellFactory(param -> new TableCell<Receipt, Receipt>() {
 			private final Button button = new Button("remove");
 
 			@Override
-			protected void updateItem(Seller obj, boolean empty) {
+			protected void updateItem(Receipt obj, boolean empty) {
 				super.updateItem(obj, empty);
 				if (obj == null) {
 					setGraphic(null);
@@ -174,7 +199,7 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 		});
 	}
 
-	private void removeEntity(Seller obj) {
+	private void removeEntity(Receipt obj) {
 		Optional<ButtonType> result = Alerts.showConfirmation("Confirmation", "Are you sure to delete?");
 
 		if (result.get() == ButtonType.OK) {

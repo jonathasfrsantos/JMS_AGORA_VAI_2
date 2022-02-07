@@ -198,9 +198,9 @@ public class ReceiptDaoJDBC implements ReceiptDao {
 		Customer customer = new Customer();
 		customer.setId(rs.getInt("cod_customer"));
 		customer.setName(rs.getString("name"));
-		customer.setFeesValue(rs.getDouble("valor"));
-		customer.setEmail(rs.getString("email"));
-		customer.setEmail2(rs.getString("email2"));// apos  comentar essa linha o
+		//customer.setFeesValue(rs.getDouble("value"));
+		//customer.setEmail(rs.getString("email"));
+		//customer.setEmail2(rs.getString("email2"));// apos  comentar essa linha o
 		// programa funcionou
 		return customer;
 

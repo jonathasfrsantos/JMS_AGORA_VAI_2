@@ -31,15 +31,16 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
-import model.entities.Department;
-import model.entities.Seller;
+import model.entities.Customer;
+import model.entities.Customer;
+import model.entities.Receipt;
 import model.exceptions.ValidationException;
 import model.services.CustomerService;
 import model.services.ReceiptService;
 
 public class ReceiptFormController implements Initializable {
 
-	private Seller entity;
+	private Receipt entity;
 
 	private ReceiptService service;
 
@@ -48,34 +49,43 @@ public class ReceiptFormController implements Initializable {
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
-	private TextField txtId;
+	private TextField txtCod;
 
 	@FXML
-	private TextField txtName;
+	private TextField txtDocumentType;
 
 	@FXML
-	private TextField txtEmail;
+	private DatePicker dpIssueDate;
 
 	@FXML
-	private DatePicker dpBirthDate;
+	private DatePicker dpDueDate;
 
 	@FXML
-	private TextField txtBaseSalary;
+	private TextField txtValue;
 
 	@FXML
-	private ComboBox<Department> comboBoxDepartment;
+	private TextField txtPaymentStatus;
 
 	@FXML
-	private Label labelErrorName;
+	private DatePicker dpPayDate;
 
 	@FXML
-	private Label labelErrorEmail;
+	private TextField txtBank;
 
 	@FXML
-	private Label labelErrorBirthDate;
+	private ComboBox<Customer> comboBoxCustomer;
 
 	@FXML
-	private Label labelErrorBaseSalary;
+	private Label labelErrorDocumentType;
+
+	@FXML
+	private Label labelErrorIssueDate;
+
+	@FXML
+	private Label labelErrorDueDate;
+
+	@FXML
+	private Label labelErrorValue;
 
 	@FXML
 	private Button btSave;
@@ -83,9 +93,9 @@ public class ReceiptFormController implements Initializable {
 	@FXML
 	private Button btCancel;
 
-	private ObservableList<Department> obsList;
+	private ObservableList<Customer> obsList;
 
-	public void setSeller(Seller entity) {
+	public void setReceipt(Receipt entity) {
 		this.entity = entity;
 	}
 
@@ -124,38 +134,47 @@ public class ReceiptFormController implements Initializable {
 		}
 	}
 
-	private Seller getFormData() {
-		Seller obj = new Seller();
+	private Receipt getFormData() {
+		Receipt obj = new Receipt();
 
 		ValidationException exception = new ValidationException("Validation error");
 
-		obj.setId(Utils.tryParseToInt(txtId.getText()));
+		obj.setCodDocument(Utils.tryParseToInt(txtCod.getText()));
 
-		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
-			exception.addError("name", "Field can't be empty");
+		if (txtDocumentType.getText() == null || txtDocumentType.getText().trim().equals("")) {
+			exception.addError("documentType", "Field can't be empty");
 		}
-		obj.setName(txtName.getText());
+		obj.setDocumentType(txtDocumentType.getText());
 
-		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
-			exception.addError("email", "Field can't be empty");
+		if (dpIssueDate.getValue() == null) {
+			exception.addError("issueDate", "Field can't be empty");
+		} else {
+			Instant instant = Instant.from(dpIssueDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setIssueDate(Date.from(instant));
 		}
-		obj.setEmail(txtEmail.getText());
-		
-		if (dpBirthDate.getValue() == null) {
-			exception.addError("birthDate", "Field can't be empty");
+
+		if (dpDueDate.getValue() == null) {
+			exception.addError("dueDate", "Field can't be empty");
+		} else {
+			Instant instant = Instant.from(dpDueDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+			obj.setDueDate(Date.from(instant));
 		}
-		else {
-			Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
-			obj.setBirthDate(Date.from(instant));
+
+		if (txtValue.getText() == null || txtValue.getText().trim().equals("")) {
+			exception.addError("value", "Field can't be empty");
 		}
+		obj.setValue(Utils.tryParseToDouble(txtValue.getText()));
 		
-		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
-			exception.addError("baseSalary", "Field can't be empty");
-		}
-		obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
+		obj.setPaymentStatus(txtPaymentStatus.getText());
 		
-		obj.setDepartment(comboBoxDepartment.getValue());
+		//Após comentar essas linhas funcionou
+		//Instant instant = Instant.from(dpPayDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+		//obj.setPayDate(Date.from(instant));
 		
+		obj.setBank(txtBank.getText());
+
+		obj.setCustomer(comboBoxCustomer.getValue());
+
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
@@ -174,61 +193,79 @@ public class ReceiptFormController implements Initializable {
 	}
 
 	private void initializeNodes() {
-		Constraints.setTextFieldInteger(txtId);
-		Constraints.setTextFieldMaxLength(txtName, 70);
-		Constraints.setTextFieldDouble(txtBaseSalary);
-		Constraints.setTextFieldMaxLength(txtEmail, 60);
-		Utils.formatDatePicker(dpBirthDate, "dd/MM/yyyy");
-		
-		initializeComboBoxDepartment();
+		Constraints.setTextFieldInteger(txtCod);
+		Constraints.setTextFieldMaxLength(txtDocumentType, 11);
+		Utils.formatDatePicker(dpIssueDate, "dd/MM/yyyy");
+		Utils.formatDatePicker(dpDueDate, "dd/MM/yyyy");
+		Constraints.setTextFieldDouble(txtValue);
+		Constraints.setTextFieldMaxLength(txtPaymentStatus, 11);
+		Utils.formatDatePicker(dpPayDate, "dd/MM/yyyy");
+		Constraints.setTextFieldMaxLength(txtBank, 11);
+		initializeComboBoxCustomer();
 	}
 
 	public void updateFormData() {
 		if (entity == null) {
 			throw new IllegalStateException("Entity was null");
 		}
-		txtId.setText(String.valueOf(entity.getId()));
-		txtName.setText(entity.getName());
-		txtEmail.setText(entity.getEmail());
 		Locale.setDefault(Locale.US);
-		txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
-		if (entity.getBirthDate() != null) {
-			dpBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
+		
+		txtCod.setText(String.valueOf(entity.getCodDocument()));
+		txtDocumentType.setText(entity.getDocumentType());
+		if (entity.getIssueDate() != null) {
+			dpIssueDate.setValue(LocalDate.ofInstant(entity.getIssueDate().toInstant(), ZoneId.systemDefault()));
 		}
-		if (entity.getDepartment() == null) {
-			comboBoxDepartment.getSelectionModel().selectFirst();
+		
+		if (entity.getDueDate() != null) {
+			dpDueDate.setValue(LocalDate.ofInstant(entity.getDueDate().toInstant(), ZoneId.systemDefault()));
+		}
+		
+		txtValue.setText(String.format("%.2f", entity.getValue()));
+		
+		txtPaymentStatus.setText(entity.getPaymentStatus());
+		
+		if (entity.getPayDate() != null) {
+			dpPayDate.setValue(LocalDate.ofInstant(entity.getPayDate().toInstant(), ZoneId.systemDefault()));
+		}
+		
+		txtBank.setText(entity.getBank());
+		
+		if (entity.getCustomer() == null) {
+			comboBoxCustomer.getSelectionModel().selectFirst();
 		} else {
-			comboBoxDepartment.setValue(entity.getDepartment());
+			comboBoxCustomer.setValue(entity.getCustomer());
 		}
+		
+		
 	}
 
 	public void loadAssociatedObjects() {
 		if (departmentService == null) {
-			throw new IllegalStateException("DepartmentService was null");
+			throw new IllegalStateException("CustomerService was null");
 		}
-		List<Department> list = departmentService.findAll();
+		List<Customer> list = departmentService.findAll();
 		obsList = FXCollections.observableArrayList(list);
-		comboBoxDepartment.setItems(obsList);
+		comboBoxCustomer.setItems(obsList);
 	}
 
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
-		labelErrorName.setText((fields.contains("name") ? errors.get("name") : ""));
-		labelErrorEmail.setText((fields.contains("email") ? errors.get("email") : ""));
-		labelErrorBirthDate.setText((fields.contains("birthDate") ? errors.get("birthDate") : ""));
-		labelErrorBaseSalary.setText((fields.contains("baseSalary") ? errors.get("baseSalary") : ""));
+		labelErrorDocumentType.setText((fields.contains("documentType") ? errors.get("documentType") : ""));
+		labelErrorIssueDate.setText((fields.contains("issueDate") ? errors.get("issuDate") : ""));
+		labelErrorDueDate.setText((fields.contains("dueDate") ? errors.get("dueDate") : ""));
+		labelErrorValue.setText((fields.contains("value") ? errors.get("value") : ""));
 	}
 
-	private void initializeComboBoxDepartment() {
-		Callback<ListView<Department>, ListCell<Department>> factory = lv -> new ListCell<Department>() {
+	private void initializeComboBoxCustomer() {
+		Callback<ListView<Customer>, ListCell<Customer>> factory = lv -> new ListCell<Customer>() {
 			@Override
-			protected void updateItem(Department item, boolean empty) {
+			protected void updateItem(Customer item, boolean empty) {
 				super.updateItem(item, empty);
 				setText(empty ? "" : item.getName());
 			}
 		};
-		comboBoxDepartment.setCellFactory(factory);
-		comboBoxDepartment.setButtonCell(factory.call(null));
+		comboBoxCustomer.setCellFactory(factory);
+		comboBoxCustomer.setButtonCell(factory.call(null));
 	}
 }

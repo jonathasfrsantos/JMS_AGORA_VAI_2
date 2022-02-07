@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="388.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReceiptListController">
+<VBox prefHeight="730.0" prefWidth="1136.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReceiptListController">
    <children>
-      <Label text="Seller Registration">
+      <Label prefWidth="276.0" text="Registro de comprovantes">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -21,18 +21,22 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button fx:id="btNew" mnemonicParsing="false" onAction="#onBtNewAction" text="New" />
+          <Button fx:id="btNew" mnemonicParsing="false" onAction="#onBtNewAction" text="Novo" />
         </items>
       </ToolBar>
-      <TableView fx:id="tableViewSeller" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewReceipt" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn fx:id="tableColumnId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="tableColumnName" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="tableColumnEmail" prefWidth="75.0" text="Email" />
-            <TableColumn fx:id="tableColumnBirthDate" prefWidth="75.0" text="Birth Date" />
-            <TableColumn fx:id="tableColumnBaseSalary" prefWidth="75.0" text="Base Salary" />
-            <TableColumn fx:id="tableColumnEDIT" prefWidth="75.0" />
-            <TableColumn fx:id="tableColumnREMOVE" prefWidth="75.0" />
+          <TableColumn fx:id="tableColumnCod" prefWidth="75.0" text="Número" />
+          <TableColumn fx:id="tableColumnCustomer" prefWidth="75.0" text="Empresa" />
+            <TableColumn fx:id="tableColumnDocumentType" prefWidth="75.0" text="Tipo" />
+            <TableColumn fx:id="tableColumnIssueDate" prefWidth="75.0" text="Emissão" />
+            <TableColumn fx:id="tableColumnDueDate" prefWidth="75.0" text="Vencimento" />
+            <TableColumn fx:id="tableColumnValue" prefWidth="75.0" text="Valor R$" />
+            <TableColumn fx:id="tableColumnPaymentStatus" prefWidth="75.0" text="Status" />
+            <TableColumn fx:id="tableColumnPayDate" prefWidth="115.0" text="Data pagamento" />
+            <TableColumn fx:id="tableColumnBank" prefWidth="78.0" text="Banco" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="87.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="84.0" />
         </columns>
       </TableView>
    </children>
