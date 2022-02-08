@@ -66,8 +66,11 @@ public class ReceiptFormController implements Initializable {
 	@FXML
 	private TextField txtPaymentStatus;
 
+	//@FXML
+	//private DatePicker dpPayDate;
+	
 	@FXML
-	private DatePicker dpPayDate;
+	private TextField txtPayDate;
 
 	@FXML
 	private TextField txtBank;
@@ -173,6 +176,8 @@ public class ReceiptFormController implements Initializable {
 		//Instant instant = Instant.from(dpPayDate.getValue().atStartOfDay(ZoneId.systemDefault()));
 		//obj.setPayDate(Date.from(instant));
 		
+		obj.setPayDate(txtPayDate.getText());
+		
 		obj.setBank(txtBank.getText());
 
 		obj.setCustomer(comboBoxCustomer.getValue());
@@ -202,6 +207,7 @@ public class ReceiptFormController implements Initializable {
 		Constraints.setTextFieldDouble(txtValue);
 		Constraints.setTextFieldMaxLength(txtPaymentStatus, 11);
 		//Utils.formatDatePicker(dpPayDate, "dd/MM/yyyy");
+		Constraints.setTextFieldMaxLength(txtPayDate, 12);
 		Constraints.setTextFieldMaxLength(txtBank, 11);
 		initializeComboBoxCustomer();
 	}
@@ -214,21 +220,26 @@ public class ReceiptFormController implements Initializable {
 		
 		txtCod.setText(String.valueOf(entity.getCodDocument()));
 		txtDocumentType.setText(entity.getDocumentType());
-		if (entity.getIssueDate() != null) {
-			dpIssueDate.setValue(LocalDate.ofInstant(entity.getIssueDate().toInstant(), ZoneId.systemDefault()));
-		}
 		
-		if (entity.getDueDate() != null) {
-			dpDueDate.setValue(LocalDate.ofInstant(entity.getDueDate().toInstant(), ZoneId.systemDefault()));
-		}
-		
+		// Após comentar as linhas abaixo, o edit para atualizar o formulário funcionou.
+		/*
+		 * if (entity.getIssueDate() != null) {
+		 * dpIssueDate.setValue(LocalDate.ofInstant(entity.getIssueDate().toInstant(),
+		 * ZoneId.systemDefault())); }
+		 * 
+		 * if (entity.getDueDate() != null) {
+		 * dpDueDate.setValue(LocalDate.ofInstant(entity.getDueDate().toInstant(),
+		 * ZoneId.systemDefault())); }
+		 */
 		txtValue.setText(String.format("%.2f", entity.getValue()));
 		
 		txtPaymentStatus.setText(entity.getPaymentStatus());
 		
-		if (entity.getPayDate() != null) {
-			dpPayDate.setValue(LocalDate.ofInstant(entity.getPayDate().toInstant(), ZoneId.systemDefault()));
-		}
+		//if (entity.getPayDate() != null) {
+			//dpPayDate.setValue(LocalDate.ofInstant(entity.getPayDate().toInstant(), ZoneId.systemDefault()));
+		//}
+		
+		txtPayDate.setText(entity.getPayDate());
 		
 		txtBank.setText(entity.getBank());
 		
@@ -253,10 +264,15 @@ public class ReceiptFormController implements Initializable {
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
-		labelErrorDocumentType.setText((fields.contains("documentType") ? errors.get("documentType") : ""));
-		labelErrorIssueDate.setText((fields.contains("issueDate") ? errors.get("issuDate") : ""));
-		labelErrorDueDate.setText((fields.contains("dueDate") ? errors.get("dueDate") : ""));
-		labelErrorValue.setText((fields.contains("value") ? errors.get("value") : ""));
+		/*
+		 * labelErrorDocumentType.setText((fields.contains("documentType") ?
+		 * errors.get("documentType") : ""));
+		 * labelErrorIssueDate.setText((fields.contains("issueDate") ?
+		 * errors.get("issuDate") : ""));
+		 * labelErrorDueDate.setText((fields.contains("dueDate") ? errors.get("dueDate")
+		 * : "")); labelErrorValue.setText((fields.contains("value") ?
+		 * errors.get("value") : ""));
+		 */
 	}
 
 	private void initializeComboBoxCustomer() {

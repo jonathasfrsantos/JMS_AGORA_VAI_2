@@ -16,7 +16,7 @@ public class Receipt implements Serializable {
 	private Double value;
 	private String paymentStatus;
 	private String bank;
-	private Date payDate;
+	private String payDate;
 	private Customer customer;
 
 	public Receipt() {
@@ -100,11 +100,11 @@ public class Receipt implements Serializable {
 		this.bank = bank;
 	}
 
-	public Date getPayDate() {
+	public String getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(Date payDate) {
+	public void setPayDate(String payDate) {
 		this.payDate = payDate;
 	}
 

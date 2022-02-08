@@ -84,16 +84,12 @@
                   <Insets bottom="10.0" top="10.0" />
                </GridPane.margin>
             </TextField>
-            <DatePicker fx:id="dpPayDate" prefHeight="10.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-               <GridPane.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </GridPane.margin>
-            </DatePicker>
             <ComboBox fx:id="comboBoxCustomer" prefHeight="25.0" prefWidth="252.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="10.0" top="10.0" />
                </GridPane.margin>
             </ComboBox>
+            <TextField fx:id="txtPayDate" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
    </children>

@@ -71,7 +71,7 @@ public class ReceiptDaoJDBC implements ReceiptDao {
 
 			st.setString(1, obj.getPaymentStatus());
 			st.setString(2, obj.getBank());
-			st.setDate(3, new java.sql.Date(obj.getPayDate().getTime()));
+			//st.setDate(3, new java.sql.Date(obj.getPayDate().getTime()));
 			st.setInt(4, obj.getCodDocument());
 
 			st.executeUpdate();
@@ -187,7 +187,7 @@ public class ReceiptDaoJDBC implements ReceiptDao {
 		obj.setValue(rs.getDouble("value"));
 		obj.setPaymentStatus(rs.getString("paymentStatus"));
 		obj.setBank(rs.getString("bank"));
-		obj.setPayDate(rs.getDate("payDate"));
+		obj.setPayDate(rs.getString("payDate")); // observação
 		obj.setCustomer(customer);
 
 		return obj;
