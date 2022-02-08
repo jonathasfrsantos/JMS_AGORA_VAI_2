@@ -1,24 +1,31 @@
 package application;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Scanner;
+
 import model.dao.CustomerDao;
 import model.dao.DaoFactory;
+import model.dao.ReceiptDao;
 import model.entities.Customer;
+import model.entities.Receipt;
 
 public class Program {
 	
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
 		
 		CustomerDao customerDao = DaoFactory.createCustomerDao();
+		ReceiptDao receiptDao = DaoFactory.createReceiptDao();	
+		Customer customer = customerDao.findByCod(9999);
 		
-		
-		Customer customer = new Customer(null, 7777, "Lixo S/A", 5000.0, "void@gmail.com", "void2@gmail.com");
-		
-		//Customer customer = new Customer(null, 7777,"Lixo LTDA", 999.99 , "void@gmail.com", null);
-		customerDao.InsertOrUpdate(customer);
-		
-		System.out.println(customer);
+		Receipt receipt = new Receipt(null, 7777, "recibo", sdf.parse("01/01/2022"), sdf.parse("31/01/2022"), 900.0, customer);
+		receiptDao.insertOrUpdate(receipt);
+		System.out.println(receipt);
 		
 		
 		

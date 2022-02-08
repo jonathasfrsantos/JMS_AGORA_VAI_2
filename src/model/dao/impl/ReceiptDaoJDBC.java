@@ -205,6 +205,31 @@ public class ReceiptDaoJDBC implements ReceiptDao {
 		return customer;
 
 	}
+	
+	@Override
+	public void insertOrUpdate(Receipt obj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO tb_document(cod_document, documentType, issueDate, dueDate, value, cod_customer) "
+					+ "VALUES (?, ?, ?, ?, ?, ?) "
+					+ "ON DUPLICATE key update documentType = VALUES(documentType), issueDate = VALUES(issueDate), dueDate = VALUES(dueDate), value = VALUES(value)" );
+			
+			st.setInt(1, obj.getCodDocument());
+			st.setString(2, obj.getDocumentType());
+			st.setDate(3, new java.sql.Date(obj.getIssueDate().getTime()));
+			st.setDate(4, new java.sql.Date(obj.getDueDate().getTime()));
+			st.setDouble(5, obj.getValue());
+			st.setInt(6, obj.getCustomer().getCodCustomer());
+			
+			st.executeUpdate();
+		}catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
+	}
 
 
 }

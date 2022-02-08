@@ -108,7 +108,7 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 		tableColumnValue.setCellValueFactory(new PropertyValueFactory<>("value"));
 		Utils.formatTableColumnDouble(tableColumnValue, 2);
 		tableColumnPaymentStatus.setCellValueFactory(new PropertyValueFactory<>("paymentStatus"));
-		tableColumnPayDate.setCellValueFactory(new PropertyValueFactory<>("payDate"));
+		//tableColumnPayDate.setCellValueFactory(new PropertyValueFactory<>("payDate"));
 		//Utils.formatTableColumnDate(tableColumnPayDate, "dd/MM/yyyy"); // apos comentar essa linha funcionou, porque o campo de data não pode ser um null
 		tableColumnBank.setCellValueFactory(new PropertyValueFactory<>("bank"));
 		

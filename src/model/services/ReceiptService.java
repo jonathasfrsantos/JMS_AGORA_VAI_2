@@ -15,12 +15,7 @@ public class ReceiptService {
 	}
 	
 	public void saveOrUpdate(Receipt obj) {
-		if (obj.getId() == null) {
-			dao.insert(obj);
-		}
-		else {
-			dao.update(obj);
-		}
+		dao.insertOrUpdate(obj);
 	}
 	
 	public void remove(Receipt obj) {

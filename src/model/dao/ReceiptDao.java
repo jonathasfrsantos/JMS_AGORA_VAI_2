@@ -14,6 +14,8 @@ public interface ReceiptDao {
 	  Receipt findByCod(Integer cod);
 	  List<Receipt> findAll();
 	  List<Receipt> findByCustomer(Customer customer);
+	  void insertOrUpdate(Receipt obj);
+	 
 	
 	
 
