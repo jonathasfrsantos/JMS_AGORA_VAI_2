@@ -80,8 +80,7 @@ public class Customer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", codCustomer=" + codCustomer + ", name=" + name + ", feesValue=" + feesValue
-				+ ", email=" + email + ", email2=" + email2 + "]";
+		return name;
 	}
 
 	

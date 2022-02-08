@@ -138,6 +138,8 @@ public class ReceiptFormController implements Initializable {
 		Receipt obj = new Receipt();
 
 		ValidationException exception = new ValidationException("Validation error");
+		
+
 
 		obj.setCodDocument(Utils.tryParseToInt(txtCod.getText()));
 
@@ -199,7 +201,7 @@ public class ReceiptFormController implements Initializable {
 		Utils.formatDatePicker(dpDueDate, "dd/MM/yyyy");
 		Constraints.setTextFieldDouble(txtValue);
 		Constraints.setTextFieldMaxLength(txtPaymentStatus, 11);
-		Utils.formatDatePicker(dpPayDate, "dd/MM/yyyy");
+		//Utils.formatDatePicker(dpPayDate, "dd/MM/yyyy");
 		Constraints.setTextFieldMaxLength(txtBank, 11);
 		initializeComboBoxCustomer();
 	}

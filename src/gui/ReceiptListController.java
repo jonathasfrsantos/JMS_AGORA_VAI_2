@@ -111,12 +111,8 @@ public class ReceiptListController implements Initializable, DataChangeListener 
 		//tableColumnPayDate.setCellValueFactory(new PropertyValueFactory<>("payDate"));
 		//Utils.formatTableColumnDate(tableColumnPayDate, "dd/MM/yyyy"); // apos comentar essa linha funcionou, porque o campo de data não pode ser um null
 		tableColumnBank.setCellValueFactory(new PropertyValueFactory<>("bank"));
+		tableColumnCustomer.setCellValueFactory(new PropertyValueFactory<>("customer"));
 		
-		
-		
-		
-	
-
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewReceipt.prefHeightProperty().bind(stage.heightProperty());
 	}
